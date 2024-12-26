@@ -73,8 +73,8 @@ def main():
             # eat food
             if snake_head_x == food_x and snake_head_y == food_y:
                 snake_length += 1
-                food_x = random.randint(0, GRID_WIDTH)
-                food_y = random.randint(0, GRID_HEIGHT)
+                food_x = random.randint(0, GRID_WIDTH - 1)
+                food_y = random.randint(0, GRID_HEIGHT - 1)
 
             # collide with self
             if (snake_head_x, snake_head_y) in snake_body[1:]:
