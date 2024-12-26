@@ -1,12 +1,13 @@
 import pygame
 import random
-
-SCREEN_WIDTH = 500
-SCREEN_HEIGHT = 500
+import math
 
 GRID_CELL_SIZE = 10
 GRID_WIDTH = 20
 GRID_HEIGHT = 20
+
+SCREEN_WIDTH = GRID_WIDTH * GRID_CELL_SIZE
+SCREEN_HEIGHT = GRID_HEIGHT * GRID_CELL_SIZE
 
 DIRECTION_UP = 0
 DIRECTION_DOWN = 1
@@ -15,8 +16,8 @@ DIRECTION_RIGHT = 3
 
 
 def main():
-    snake_head_x = GRID_WIDTH / 2
-    snake_head_y = GRID_HEIGHT / 2
+    snake_head_x = math.floor(GRID_WIDTH / 2)
+    snake_head_y = math.floor(GRID_HEIGHT / 2)
     snake_body = [(snake_head_x, snake_head_y)]
     snake_length = 1
 
@@ -53,19 +54,19 @@ def main():
         if cur_direction == DIRECTION_RIGHT:
             snake_head_x += 1
 
+        if snake_head_x < 0:
+            snake_head_x = GRID_WIDTH - 1
+        elif snake_head_x == GRID_WIDTH:
+            snake_head_x = 0
+        elif snake_head_y < 0:
+            snake_head_y = GRID_HEIGHT - 1
+        elif snake_head_y == GRID_HEIGHT:
+            snake_head_y = 0
+
         snake_body.insert(0, (snake_head_x, snake_head_y))
 
         if len(snake_body) > snake_length:
             snake_body.pop()
-
-        if snake_head_x < 0:
-            snake_head_x = GRID_WIDTH
-        if snake_head_x > GRID_WIDTH:
-            snake_head_x = 0
-        if snake_head_y < 0:
-            snake_head_y = GRID_HEIGHT
-        if snake_head_y > GRID_HEIGHT:
-            snake_head_y = 0
 
         # eat food
         if snake_head_x == food_x and snake_head_y == food_y:
@@ -87,7 +88,7 @@ def main():
 
         # update
         pygame.display.update()
-        clock.tick(5)
+        clock.tick(3)
 
 def grid_to_screen(grid_x, grid_y):
     return (grid_x * GRID_CELL_SIZE, grid_y * GRID_CELL_SIZE)
