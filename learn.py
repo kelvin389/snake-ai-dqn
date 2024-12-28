@@ -32,6 +32,8 @@ DIRECTION_DOWN = 1
 DIRECTION_LEFT = 2
 DIRECTION_RIGHT = 3
 
+STEPS_TO_TRAIN = 1000000
+
 class SnakeEnv(gym.Env):
     def __init__(self):
         self.action_space = gym.spaces.Discrete(4)
@@ -197,7 +199,7 @@ def train():
     check_env(env)
     env = DummyVecEnv([lambda: env])
     model = DQN("MlpPolicy", env, verbose=1)
-    model.learn(total_timesteps=500000)
+    model.learn(total_timesteps=STEPS_TO_TRAIN)
     model.save("dqn_snake_model")
 
 def play():
