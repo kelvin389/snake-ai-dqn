@@ -2,9 +2,10 @@ import pygame
 import random
 import math
 
-GRID_CELL_SIZE = 10
-GRID_WIDTH = 20
-GRID_HEIGHT = 20
+FPS = 7 
+GRID_CELL_SIZE = 25
+GRID_WIDTH = 10
+GRID_HEIGHT = 10
 
 SCREEN_WIDTH = GRID_WIDTH * GRID_CELL_SIZE
 SCREEN_HEIGHT = GRID_HEIGHT * GRID_CELL_SIZE
@@ -56,14 +57,8 @@ def main():
             if cur_direction == DIRECTION_RIGHT:
                 snake_head_x += 1
 
-            if snake_head_x < 0:
-                snake_head_x = GRID_WIDTH - 1
-            elif snake_head_x == GRID_WIDTH:
-                snake_head_x = 0
-            elif snake_head_y < 0:
-                snake_head_y = GRID_HEIGHT - 1
-            elif snake_head_y == GRID_HEIGHT:
-                snake_head_y = 0
+            if snake_head_x < 0 or snake_head_x == GRID_WIDTH or snake_head_y < 0 or snake_head_y == GRID_HEIGHT: 
+                break
 
             snake_body.insert(0, (snake_head_x, snake_head_y))
 
@@ -73,8 +68,10 @@ def main():
             # eat food
             if snake_head_x == food_x and snake_head_y == food_y:
                 snake_length += 1
-                food_x = random.randint(0, GRID_WIDTH - 1)
-                food_y = random.randint(0, GRID_HEIGHT - 1)
+
+                while (food_x, food_y) in snake_body:
+                    food_x = random.randint(0, GRID_WIDTH - 1)
+                    food_y = random.randint(0, GRID_HEIGHT - 1)
 
             # collide with self
             if (snake_head_x, snake_head_y) in snake_body[1:]:
@@ -85,17 +82,19 @@ def main():
             screen.fill((0,0,0))
 
             # draw snake
-            for piece in snake_body:
+            draw_pos = grid_to_screen(snake_body[0][0], snake_body[0][1])
+            pygame.draw.rect(screen, (0, 124, 255), [draw_pos[0], draw_pos[1], GRID_CELL_SIZE, GRID_CELL_SIZE])
+            for piece in snake_body[1:]:
                 draw_pos = grid_to_screen(piece[0], piece[1])
-                pygame.draw.rect(screen, (255, 255, 255), [draw_pos[0], draw_pos[1], 10, 10])
+                pygame.draw.rect(screen, (255, 255, 255), [draw_pos[0], draw_pos[1], GRID_CELL_SIZE, GRID_CELL_SIZE])
 
             # draw food
             draw_pos = grid_to_screen(food_x, food_y)
-            pygame.draw.rect(screen, (255, 0, 0), [draw_pos[0], draw_pos[1], 10, 10])
+            pygame.draw.rect(screen, (255, 0, 0), [draw_pos[0], draw_pos[1], GRID_CELL_SIZE, GRID_CELL_SIZE])
 
             # update
             pygame.display.update()
-            clock.tick(3)
+            clock.tick(FPS)
 
 def grid_to_screen(grid_x, grid_y):
     return (grid_x * GRID_CELL_SIZE, grid_y * GRID_CELL_SIZE)
