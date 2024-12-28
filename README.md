@@ -15,3 +15,5 @@ This is an AI that learns to play [snake](<https://en.wikipedia.org/wiki/Snake_(
 `python learn.py train` to train only
 
 `python learn.py play` to play with the currently trained model (dqn_snake_model.zip)
+
+![showcase](showcase.gif)
